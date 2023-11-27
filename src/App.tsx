@@ -1,25 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import styled from "styled-components";
+import Todo from "./components/Todo/Todo";
+import TodoForm from "./components/TodoForm/TodoForm";
+import {useRecoilValue} from "recoil";
+import {Categories, categoryState, todoSelector} from "./atom/atoms";
+import TodoSelect from "./components/TodoForm/TodoSelect";
 
+const Wrapper = styled.div``;
+const TodoTitle = styled.h2``;
 function App() {
+  const cateState = useRecoilValue(categoryState);
+  const todoList = useRecoilValue(todoSelector);
+  const title =
+    cateState === Categories.TODO
+      ? "What You Have To Do"
+      : cateState === Categories.DOING
+      ? "What You're Doing Now"
+      : "What I Done";
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Wrapper>
+      <TodoTitle>{title}</TodoTitle>
+      <TodoSelect />
+      <TodoForm />
+      {todoList.map((todo) => (
+        <Todo key={todo.id} {...todo} />
+      ))}
+    </Wrapper>
   );
 }
 
