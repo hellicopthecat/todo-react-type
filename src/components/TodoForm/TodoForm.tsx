@@ -1,27 +1,30 @@
 import {useForm} from "react-hook-form";
-import {useRecoilValue, useSetRecoilState} from "recoil";
+import {useRecoilState, useSetRecoilState} from "recoil";
 import styled from "styled-components";
-import {categoryState, todoState} from "../../atom/atoms";
+import {Categories, categoryState, todoState} from "../../atom/atoms";
 
 const TodoFormCont = styled.form``;
 const TodoLabel = styled.label``;
 const TodoInput = styled.input``;
 const TodoBtn = styled.button``;
-
+const SelectTodo = styled.select``;
 interface ITodoForm {
   todoInput: string;
 }
 const TodoForm = () => {
   const {register, handleSubmit, setValue} = useForm<ITodoForm>();
   const setTodo = useSetRecoilState(todoState);
-  const currentCategory = useRecoilValue(categoryState);
+  const [cate, setCate] = useRecoilState(categoryState);
+  const onSelectChange = (event: React.FormEvent<HTMLSelectElement>) => {
+    setCate(event.currentTarget.value as any);
+  };
   const onTodoSubmit = ({todoInput}: ITodoForm) => {
     setTodo((prev) => [
       ...prev,
       {
         id: Date.now(),
         todo: todoInput,
-        category: currentCategory,
+        category: cate,
       },
     ]);
     setValue("todoInput", "");
@@ -29,6 +32,12 @@ const TodoForm = () => {
 
   return (
     <TodoFormCont onSubmit={handleSubmit(onTodoSubmit)}>
+      <TodoLabel htmlFor="todoSelect">Select</TodoLabel>
+      <SelectTodo id="todoSelect" value={cate} onChange={onSelectChange}>
+        <option value={Categories.TODO}>Todo</option>
+        <option value={Categories.DOING}>Doing</option>
+        <option value={Categories.DONE}>Done</option>
+      </SelectTodo>
       <TodoLabel htmlFor="todoInput">To Do</TodoLabel>
       <TodoInput
         id="todoInput"

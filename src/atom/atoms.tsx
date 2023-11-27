@@ -19,6 +19,19 @@ export const isDark = atom({
 export const todoState = atom<ITodo[]>({
   key: "todo",
   default: [],
+  effects: [
+    ({setSelf, onSet}) => {
+      const savedData = localStorage.getItem("todo");
+      if (savedData !== null) {
+        setSelf(JSON.parse(savedData));
+      }
+      onSet((newValue, _, isReset) => {
+        isReset
+          ? localStorage.removeItem(todoState.key)
+          : localStorage.setItem(todoState.key, JSON.stringify(newValue));
+      });
+    },
+  ],
 });
 export const categoryState = atom<Categories>({
   key: "category",

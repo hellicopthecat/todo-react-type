@@ -1,4 +1,4 @@
-import {useSetRecoilState} from "recoil";
+import {useRecoilState} from "recoil";
 import styled from "styled-components";
 import {Categories, ITodo, todoState} from "../../atom/atoms";
 
@@ -9,7 +9,7 @@ const TodoRowCont = styled.div``;
 const TransformCate = styled.button``;
 
 const Todo: React.FC<ITodo> = ({id, todo, category}) => {
-  const setTodos = useSetRecoilState(todoState);
+  const [toDos, setTodos] = useRecoilState(todoState);
   const changeCate = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {name} = event.currentTarget;
     setTodos((prev) => {
@@ -22,7 +22,12 @@ const Todo: React.FC<ITodo> = ({id, todo, category}) => {
       ];
     });
   };
-
+  const removeTodo = () => {
+    setTodos(() => {
+      const newTodo = toDos.filter((todo) => todo.id !== id);
+      return [...newTodo];
+    });
+  };
   return (
     <TodoListCont>
       <li>
@@ -47,7 +52,7 @@ const Todo: React.FC<ITodo> = ({id, todo, category}) => {
               MOVE DONE
             </TransformCate>
           )}
-          <TransformCate>DELETE</TransformCate>
+          <TransformCate onClick={removeTodo}>DELETE</TransformCate>
         </TodoRowCont>
       </li>
     </TodoListCont>
