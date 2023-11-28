@@ -26,10 +26,14 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+*{
+	box-sizing:border-box;
+}
 body {
 	line-height: 1;
     background-color:${(props) => props.theme.bgColor};
-    color:${(props) => props.theme.txtColor}
+    color:${(props) => props.theme.txtColor};
+	height:100vh;
 }
 ol, ul {	
 	list-style:none;
@@ -48,5 +52,12 @@ table {
 }
 h2{
 	font-size:25px
-	}
+}
+button{
+background-color:inherit;
+border:none;
+}
+select,input{
+border:1px solid rgba(0,0,0,0.2)
+}
 `;

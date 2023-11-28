@@ -1,14 +1,30 @@
-import styled from "styled-components";
+import styled, {ThemeProvider} from "styled-components";
 import Todo from "./components/Todo/Todo";
 import TodoForm from "./components/TodoForm/TodoForm";
 import {useRecoilValue} from "recoil";
-import {Categories, categoryState, todoSelector} from "./atom/atoms";
-import Header from "./components/main/header";
+import {Categories, categoryState, isDark, todoSelector} from "./atom/atoms";
+import Header from "./components/main/Header";
+import {darkTheme, lightTheme} from "./theme/theme";
+import {GlobalStyle} from "./theme/global";
 
-const Wrapper = styled.div``;
-const TodoTitle = styled.h2``;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+`;
+
+const FormCont = styled.div`
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+`;
+const TodoTitle = styled.h2`
+  margin-bottom: 40px;
+`;
 
 function App() {
+  const theme = useRecoilValue(isDark);
   const todoList = useRecoilValue(todoSelector);
   const cateState = useRecoilValue(categoryState);
   const title =
@@ -16,17 +32,24 @@ function App() {
       ? "What You Have To Do"
       : cateState === Categories.DOING
       ? "What You're Doing Now"
-      : "What I Done";
+      : cateState === Categories.DONE
+      ? "What I Done"
+      : "CUSTOM";
 
   return (
-    <Wrapper>
-      <Header />
-      <TodoTitle>{title}</TodoTitle>
-      <TodoForm />
-      {todoList.map((todo) => (
-        <Todo key={todo.id} {...todo} />
-      ))}
-    </Wrapper>
+    <ThemeProvider theme={theme ? darkTheme : lightTheme}>
+      <GlobalStyle />
+      <Wrapper>
+        <Header />
+        <FormCont>
+          <TodoTitle>{title}</TodoTitle>
+          <TodoForm />
+        </FormCont>
+        {todoList.map((todo) => (
+          <Todo key={todo.id} {...todo} />
+        ))}
+      </Wrapper>
+    </ThemeProvider>
   );
 }
 

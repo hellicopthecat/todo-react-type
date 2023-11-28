@@ -4,11 +4,13 @@ export enum Categories {
   "TODO" = "TODO",
   "DOING" = "DOING",
   "DONE" = "DONE",
+  "CUSTOM" = "CUSTOM",
 }
 export interface ITodo {
   id: number;
   todo: string;
   category: Categories;
+  customInput: string;
 }
 
 export const isDark = atom({
