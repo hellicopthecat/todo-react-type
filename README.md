@@ -25,3 +25,5 @@ npm run predeploy
 ```
 
 ## Depoly Page
+
+https://hellicopthecat.github.io/todo-react-type/
